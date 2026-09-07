@@ -1,0 +1,15 @@
+{
+  "name": "legendaryshrines:legendary_shrine",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "legendaryshrines:legendary_shrine",
+        "processors": "legendaryshrines:shrine_weathering",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

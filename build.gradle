@@ -1,0 +1,61 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
+version = '1.0.0'
+group = 'com.krampus.legendaryshrines'
+base { archivesName = 'legendaryshrines' }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'parchment', version: '2023.09.03-1.20.1'
+    copyIdeResources = true
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', ''
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'legendaryshrines'
+            args '--username', 'Dev', '--quickPlaySingleplayer', 'New World'
+            mods { legendaryshrines { source sourceSets.main } }
+        }
+        server {
+            workingDirectory project.file('run/server')
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'legendaryshrines'
+            mods { legendaryshrines { source sourceSets.main } }
+        }
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'legendaryshrines', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods { legendaryshrines { source sourceSets.main } }
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "legendaryshrines",
+                "Specification-Vendor"    : "Krampus",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "Krampus",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.4.22'
+}

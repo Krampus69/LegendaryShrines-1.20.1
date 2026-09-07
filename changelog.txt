@@ -1,0 +1,4 @@
+Legendary_Shrine 1.20.1 Changelog
+1.0
+====
+initial release.

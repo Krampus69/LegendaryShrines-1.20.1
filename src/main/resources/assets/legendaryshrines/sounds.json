@@ -1,0 +1,14 @@
+{
+	"shrine_activated": {
+		"subtitle": "subtitles.legendaryshrines.shrine_activated",
+		"sounds": [
+			"legendaryshrines:shrine_activated"
+		]
+	},
+	"resurect": {
+		"subtitle": "subtitles.legendaryshrines.resurect",
+		"sounds": [
+			"legendaryshrines:resurect"
+		]
+	}
+}

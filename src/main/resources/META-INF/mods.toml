@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "legendaryshrines"
+version = "${file.jarVersion}"
+displayName = "Legendary Shrines"
+authors = "Krampus"
+logoFile = "logo.png"
+description = '''
+Adds rare shrines that generate across the overworld.
+
+Walk near one and it binds to you, letting you choose it over your bed when you
+die. Each shrine works for the player it is bound to, and the
+link breaks if you travel too far from it.
+'''
+
+[[dependencies.legendaryshrines]]
+    modId = "forge"
+    mandatory = true
+    versionRange = "[47,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.legendaryshrines]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.20.1,1.21)"
+    ordering = "NONE"
+    side = "BOTH"

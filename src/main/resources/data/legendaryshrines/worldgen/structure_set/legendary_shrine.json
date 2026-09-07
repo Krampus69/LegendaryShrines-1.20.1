@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "legendaryshrines:legendary_shrine",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spread_type": "linear",
+    "spacing": 37,
+    "separation": 16,
+    "salt": 1946037
+  }
+}

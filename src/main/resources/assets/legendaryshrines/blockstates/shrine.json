@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"half=lower": {
+			"model": "legendaryshrines:block/shrine_bottom"
+		},
+		"half=upper": {
+			"model": "legendaryshrines:block/shrine_top"
+		}
+	}
+}

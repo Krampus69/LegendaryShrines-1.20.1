@@ -1,0 +1,19 @@
+{
+	"block.legendaryshrines.shrine": "Shrine",
+	"item.legendaryshrines.shrine": "Shrine",
+	"itemGroup.legendaryshrines.main": "Legendary Shrines",
+	"gui.legendaryshrines.respawn_at_shrine": "Respawn at the Shrine",
+	"commands.legendaryshrines.unlink.self": "Unlinked from your shrine",
+	"commands.legendaryshrines.unlink.others": "Unlinked %s player(s)",
+	"commands.legendaryshrines.unlink.none": "You are not linked to a shrine",
+	"commands.legendaryshrines.unlink.none_matched": "No targeted player was linked to a shrine",
+	"commands.legendaryshrines.status.linked": "Linked to shrine at %s in %s, %s blocks away",
+	"commands.legendaryshrines.status.other_dimension": "Linked to shrine at %s in %s, another dimension",
+	"commands.legendaryshrines.status.none": "Not linked to any shrine",
+	"message.legendaryshrines.link_formed": "A shrine has been activated nearby.",
+	"message.legendaryshrines.link_broken": "The shrine effect is no more.",
+	"message.legendaryshrines.link_lost": "The Shrine no longer stands. Your bond with it is broken.",
+	"subtitles.legendaryshrines.shrine_activated": "Shrine awakens",
+	"message.legendaryshrines.on_use": "The shrine activates on death",
+	"subtitles.legendaryshrines.resurect": "Shrine restores you"
+}
