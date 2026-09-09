@@ -15,5 +15,6 @@
 	"message.legendaryshrines.link_lost": "The Shrine no longer stands. Your bond with it is broken.",
 	"subtitles.legendaryshrines.shrine_activated": "Shrine awakens",
 	"message.legendaryshrines.on_use": "The shrine activates on death",
+	"message.legendaryshrines.already_linked": "You are already bound to this shrine",
 	"subtitles.legendaryshrines.resurect": "Shrine restores you"
 }

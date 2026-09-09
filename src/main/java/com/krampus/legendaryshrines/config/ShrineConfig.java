@@ -8,6 +8,7 @@ public final class ShrineConfig {
 
     public static final ForgeConfigSpec.IntValue BIND_RADIUS;
     public static final ForgeConfigSpec.IntValue BREAK_DISTANCE;
+    public static final ForgeConfigSpec.BooleanValue BIND_ON_USE;
     public static final ForgeConfigSpec.IntValue RESPAWN_COOLDOWN;
     public static final ForgeConfigSpec.BooleanValue OVERRIDE_VANILLA_RESPAWN;
     public static final ForgeConfigSpec.BooleanValue SOUNDS_ENABLED;
@@ -25,6 +26,11 @@ public final class ShrineConfig {
                 .comment("How far a player can travel from their shrine before the link breaks, in blocks.",
                         "Set to 0 to make links never break by distance.")
                 .defineInRange("breakDistance", 1000, 0, 30000000);
+
+        BIND_ON_USE = builder
+                .comment("Require players to right click a shrine to bind to it instead of binding by proximity.",
+                        "bindRadius is ignored while this is enabled.")
+                .define("bindOnUse", false);
 
         builder.pop();
         builder.push("respawn");

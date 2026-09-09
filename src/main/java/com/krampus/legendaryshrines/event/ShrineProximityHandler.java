@@ -70,6 +70,10 @@ public final class ShrineProximityHandler {
             current = null;
         }
 
+        if (ShrineConfig.BIND_ON_USE.get()) {
+            return;
+        }
+
         BlockPos nearest = locations.findNearest(player.getX(), player.getY(), player.getZ(), ShrineConfig.BIND_RADIUS.get());
 
         if (nearest != null && isShrineGone(level, nearest)) {
@@ -94,10 +98,15 @@ public final class ShrineProximityHandler {
             return;
         }
 
-        ShrineBind bind = new ShrineBind(nearest, level.dimension());
+        bind(player, level, nearest);
+    }
+
+    public static void bind(ServerPlayer player, ServerLevel level, BlockPos pos) {
+        ShrineBinding.clearSuppressed(player);
+        ShrineBind bind = new ShrineBind(pos, level.dimension());
         ShrineBinding.set(player, bind);
         ModNetwork.syncBind(player, bind, true);
-        announceBind(player, level, nearest);
+        announceBind(player, level, pos);
     }
 
     private static boolean isShrineGone(ServerLevel level, BlockPos pos) {

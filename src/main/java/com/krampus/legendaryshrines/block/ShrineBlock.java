@@ -1,11 +1,16 @@
 package com.krampus.legendaryshrines.block;
 
 import com.krampus.legendaryshrines.block.entity.ShrineBlockEntity;
+import com.krampus.legendaryshrines.config.ShrineConfig;
+import com.krampus.legendaryshrines.data.ShrineBind;
+import com.krampus.legendaryshrines.data.ShrineBinding;
+import com.krampus.legendaryshrines.event.ShrineProximityHandler;
 import com.krampus.legendaryshrines.data.ShrineLocations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -132,8 +137,22 @@ public class ShrineBlock extends Block implements EntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
                                  InteractionHand hand, BlockHitResult hit) {
-        if (!level.isClientSide) {
-            player.displayClientMessage(Component.translatable("message.legendaryshrines.on_use"), true);
+        if (level instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
+            if (!ShrineConfig.BIND_ON_USE.get()) {
+                player.displayClientMessage(Component.translatable("message.legendaryshrines.on_use"), true);
+                return InteractionResult.CONSUME;
+            }
+
+            BlockPos lower = state.getValue(HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
+            ShrineBind current = ShrineBinding.get(serverPlayer);
+            if (current != null
+                    && current.dimension().equals(serverLevel.dimension())
+                    && current.pos().equals(lower)) {
+                player.displayClientMessage(Component.translatable("message.legendaryshrines.already_linked"), true);
+                return InteractionResult.CONSUME;
+            }
+
+            ShrineProximityHandler.bind(serverPlayer, serverLevel, lower);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
