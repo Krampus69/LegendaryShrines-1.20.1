@@ -1,4 +1,5 @@
 Legendary_Shrine 1.20.1 Changelog
-1.0
+1.0.1
 ====
-initial release.
+Added a config to activate on right click
+Fixed teleporting through the ground
