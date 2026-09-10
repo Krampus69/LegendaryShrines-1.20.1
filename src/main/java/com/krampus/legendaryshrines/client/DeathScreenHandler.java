@@ -69,7 +69,7 @@ public final class DeathScreenHandler {
             return;
         }
 
-        if (!(Minecraft.getInstance().screen instanceof DeathScreen)) {
+        if (Minecraft.getInstance().screen == null) {
             shrineButton = null;
             return;
         }
