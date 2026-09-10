@@ -1,5 +1,4 @@
 Legendary_Shrine 1.20.1 Changelog
-1.0.1
+1.0.2
 ====
-Added a config to activate on right click
-Fixed teleporting through the ground
+fixed compat with you Died mod
