@@ -2,7 +2,6 @@ package com.krampus.legendaryshrines.client;
 
 import com.krampus.legendaryshrines.LegendaryShrines;
 import com.krampus.legendaryshrines.config.ShrineConfig;
-import com.krampus.legendaryshrines.network.ModNetwork;
 import com.krampus.legendaryshrines.network.RespawnAtShrinePacket;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -11,14 +10,15 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = LegendaryShrines.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = LegendaryShrines.MOD_ID, value = Dist.CLIENT)
 public final class DeathScreenHandler {
 
     private static final int BUTTON_WIDTH = 200;
@@ -56,7 +56,7 @@ public final class DeathScreenHandler {
         Button button = new Button(x, y, BUTTON_WIDTH, BUTTON_HEIGHT,
                 Component.translatable("gui.legendaryshrines.respawn_at_shrine"),
                 pressed -> {
-                    ModNetwork.CHANNEL.sendToServer(new RespawnAtShrinePacket());
+                    PacketDistributor.sendToServer(new RespawnAtShrinePacket());
                     if (minecraft.player != null) {
                         minecraft.player.respawn();
                     }

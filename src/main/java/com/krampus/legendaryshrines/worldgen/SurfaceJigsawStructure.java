@@ -2,6 +2,7 @@ package com.krampus.legendaryshrines.worldgen;
 
 import com.krampus.legendaryshrines.registry.ModStructures;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -11,15 +12,18 @@ import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 
 import java.util.Optional;
 
 public class SurfaceJigsawStructure extends Structure {
 
-    public static final Codec<SurfaceJigsawStructure> CODEC =
-            RecordCodecBuilder.<SurfaceJigsawStructure>mapCodec(instance -> instance.group(
+    public static final MapCodec<SurfaceJigsawStructure> CODEC =
+            RecordCodecBuilder.mapCodec(instance -> instance.group(
                     settingsCodec(instance),
                     StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(s -> s.startPool),
                     Codec.intRange(0, 7).fieldOf("size").forGetter(s -> s.maxDepth),
@@ -28,7 +32,7 @@ public class SurfaceJigsawStructure extends Structure {
                             .forGetter(s -> s.projectStartToHeightmap),
                     Codec.intRange(1, 128).fieldOf("max_distance_from_center")
                             .forGetter(s -> s.maxDistanceFromCenter)
-            ).apply(instance, SurfaceJigsawStructure::new)).codec();
+            ).apply(instance, SurfaceJigsawStructure::new));
 
     private final Holder<StructureTemplatePool> startPool;
     private final int maxDepth;
@@ -68,7 +72,8 @@ public class SurfaceJigsawStructure extends Structure {
 
         return JigsawPlacement.addPieces(context, this.startPool, Optional.empty(), this.maxDepth,
                 new BlockPos(x, y, z), false, Optional.of(this.projectStartToHeightmap),
-                this.maxDistanceFromCenter);
+                this.maxDistanceFromCenter, PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
+                LiquidSettings.APPLY_WATERLOGGING);
     }
 
     @Override

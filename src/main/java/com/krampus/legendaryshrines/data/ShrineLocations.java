@@ -1,6 +1,7 @@
 package com.krampus.legendaryshrines.data;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -14,13 +15,16 @@ public class ShrineLocations extends SavedData {
     private static final String FILE_NAME = "legendaryshrines_locations";
     private static final String KEY = "Positions";
 
+    private static final Factory<ShrineLocations> FACTORY =
+            new Factory<>(ShrineLocations::new, ShrineLocations::load, null);
+
     private final Set<BlockPos> positions = new HashSet<>();
 
     public static ShrineLocations get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(ShrineLocations::load, ShrineLocations::new, FILE_NAME);
+        return level.getDataStorage().computeIfAbsent(FACTORY, FILE_NAME);
     }
 
-    public static ShrineLocations load(CompoundTag tag) {
+    public static ShrineLocations load(CompoundTag tag, HolderLookup.Provider registries) {
         ShrineLocations data = new ShrineLocations();
         for (long packed : tag.getLongArray(KEY)) {
             data.positions.add(BlockPos.of(packed));
@@ -29,7 +33,7 @@ public class ShrineLocations extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         long[] packed = new long[this.positions.size()];
         int i = 0;
         for (BlockPos pos : this.positions) {

@@ -21,5 +21,11 @@ build
 eclipse
 run
 
+
 # Files from Forge MDK
 forge*changelog.txt
+
+# neoforge
+runs
+.kotlin
+repo

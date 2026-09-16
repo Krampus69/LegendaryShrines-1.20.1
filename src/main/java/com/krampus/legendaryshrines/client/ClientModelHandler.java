@@ -5,32 +5,33 @@ import com.krampus.legendaryshrines.client.particle.RuneParticle;
 import com.krampus.legendaryshrines.registry.ModBlockEntities;
 import com.krampus.legendaryshrines.registry.ModParticles;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(modid = LegendaryShrines.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LegendaryShrines.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public final class ClientModelHandler {
 
-    public static final ResourceLocation RUNES_MODEL =
-            new ResourceLocation(LegendaryShrines.MOD_ID, "block/shrine_runes");
+    public static final ModelResourceLocation RUNES_MODEL = ModelResourceLocation.standalone(
+            ResourceLocation.fromNamespaceAndPath(LegendaryShrines.MOD_ID, "block/shrine_runes"));
 
     private static final int ACTIVATION_FRAMES = 8;
     private static final int FRAME_TICKS = 2;
 
-    private static final ResourceLocation[] ACTIVATED_MODELS = new ResourceLocation[ACTIVATION_FRAMES];
+    private static final ModelResourceLocation[] ACTIVATED_MODELS = new ModelResourceLocation[ACTIVATION_FRAMES];
     private static final BakedModel[] ACTIVATED = new BakedModel[ACTIVATION_FRAMES];
 
     static {
         for (int i = 0; i < ACTIVATION_FRAMES; i++) {
-            ACTIVATED_MODELS[i] = new ResourceLocation(
-                    LegendaryShrines.MOD_ID, "block/shrine_runes_activated_" + i);
+            ACTIVATED_MODELS[i] = ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(
+                    LegendaryShrines.MOD_ID, "block/shrine_runes_activated_" + i));
         }
     }
 
@@ -53,7 +54,7 @@ public final class ClientModelHandler {
     @SubscribeEvent
     public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
         event.register(RUNES_MODEL);
-        for (ResourceLocation model : ACTIVATED_MODELS) {
+        for (ModelResourceLocation model : ACTIVATED_MODELS) {
             event.register(model);
         }
     }

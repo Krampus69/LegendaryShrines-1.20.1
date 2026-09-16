@@ -10,27 +10,27 @@
     "#minecraft:is_hill",
     "#minecraft:is_beach",
     {
-      "id": "#forge:is_plains",
+      "id": "#c:is_plains",
       "required": false
     },
     {
-      "id": "#forge:is_desert",
+      "id": "#c:is_desert",
       "required": false
     },
     {
-      "id": "#forge:is_swamp",
+      "id": "#c:is_swamp",
       "required": false
     },
     {
-      "id": "#forge:is_snowy",
+      "id": "#c:is_snowy",
       "required": false
     },
     {
-      "id": "#forge:is_mushroom",
+      "id": "#c:is_mushroom",
       "required": false
     },
     {
-      "id": "#forge:is_sandy",
+      "id": "#c:is_sandy",
       "required": false
     },
     "minecraft:plains",

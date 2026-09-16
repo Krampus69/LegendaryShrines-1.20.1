@@ -3,17 +3,17 @@ package com.krampus.legendaryshrines.registry;
 import com.krampus.legendaryshrines.LegendaryShrines;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModParticles {
 
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
-            DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, LegendaryShrines.MOD_ID);
+            DeferredRegister.create(Registries.PARTICLE_TYPE, LegendaryShrines.MOD_ID);
 
-    public static final RegistryObject<SimpleParticleType> RUNE =
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> RUNE =
             PARTICLE_TYPES.register("rune", () -> new SimpleParticleType(false) {
             });
 

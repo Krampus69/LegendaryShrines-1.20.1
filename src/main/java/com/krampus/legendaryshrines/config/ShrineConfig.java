@@ -1,20 +1,20 @@
 package com.krampus.legendaryshrines.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public final class ShrineConfig {
 
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.IntValue BIND_RADIUS;
-    public static final ForgeConfigSpec.IntValue BREAK_DISTANCE;
-    public static final ForgeConfigSpec.BooleanValue BIND_ON_USE;
-    public static final ForgeConfigSpec.IntValue RESPAWN_COOLDOWN;
-    public static final ForgeConfigSpec.BooleanValue OVERRIDE_VANILLA_RESPAWN;
-    public static final ForgeConfigSpec.BooleanValue SOUNDS_ENABLED;
+    public static final ModConfigSpec.IntValue BIND_RADIUS;
+    public static final ModConfigSpec.IntValue BREAK_DISTANCE;
+    public static final ModConfigSpec.BooleanValue BIND_ON_USE;
+    public static final ModConfigSpec.IntValue RESPAWN_COOLDOWN;
+    public static final ModConfigSpec.BooleanValue OVERRIDE_VANILLA_RESPAWN;
+    public static final ModConfigSpec.BooleanValue SOUNDS_ENABLED;
 
     static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.push("binding");
 

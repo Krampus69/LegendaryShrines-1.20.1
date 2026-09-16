@@ -18,21 +18,18 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@Mod.EventBusSubscriber(modid = LegendaryShrines.MOD_ID)
+@EventBusSubscriber(modid = LegendaryShrines.MOD_ID)
 public final class ShrineProximityHandler {
 
     private static final int CHECK_INTERVAL = 20;
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-        if (!(event.player instanceof ServerPlayer player)) {
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
         long floatUntil = ShrineBinding.getFloatUntil(player);
@@ -127,7 +124,7 @@ public final class ShrineProximityHandler {
         }
 
         player.connection.send(new ClientboundSoundPacket(
-                ModSounds.SHRINE_ACTIVATED.getHolder().orElseThrow(),
+                ModSounds.SHRINE_ACTIVATED,
                 SoundSource.BLOCKS,
                 pos.getX() + 0.5D,
                 pos.getY() + 1.5D,

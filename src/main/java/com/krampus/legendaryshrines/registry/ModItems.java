@@ -1,21 +1,20 @@
 package com.krampus.legendaryshrines.registry;
 
 import com.krampus.legendaryshrines.LegendaryShrines;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModItems {
 
     public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, LegendaryShrines.MOD_ID);
+            DeferredRegister.create(Registries.ITEM, LegendaryShrines.MOD_ID);
 
-    public static final RegistryObject<Item> SHRINE = ITEMS.register("shrine",
+    public static final DeferredHolder<Item, Item> SHRINE = ITEMS.register("shrine",
             () -> new BlockItem(ModBlocks.SHRINE.get(), new Item.Properties()));
-
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);

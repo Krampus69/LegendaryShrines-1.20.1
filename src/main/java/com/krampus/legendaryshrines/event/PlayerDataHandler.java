@@ -7,20 +7,21 @@ import com.krampus.legendaryshrines.data.ShrineBinding;
 import com.krampus.legendaryshrines.network.ModNetwork;
 import com.krampus.legendaryshrines.registry.ModSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-@Mod.EventBusSubscriber(modid = LegendaryShrines.MOD_ID)
+@EventBusSubscriber(modid = LegendaryShrines.MOD_ID)
 public final class PlayerDataHandler {
 
     private static final int SETTLE_TICKS = 30;
+    private static final int RESPAWN_SEARCH_RADIUS = 4;
 
 
     @SubscribeEvent
@@ -113,15 +114,31 @@ public final class PlayerDataHandler {
     }
 
     private static Vec3 findRespawnSpot(ServerLevel level, BlockPos shrine) {
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
-            BlockPos candidate = shrine.relative(direction);
-            if (level.getBlockState(candidate).isAir()
-                    && level.getBlockState(candidate.above()).isAir()
-                    && !level.getBlockState(candidate.below()).isAir()) {
-                return Vec3.atBottomCenterOf(candidate);
+        for (int radius = 1; radius <= RESPAWN_SEARCH_RADIUS; radius++) {
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dz)) != radius) {
+                        continue;
+                    }
+                    BlockPos candidate = shrine.offset(dx, 0, dz);
+                    if (canStandAt(level, candidate)) {
+                        return Vec3.atBottomCenterOf(candidate);
+                    }
+                }
             }
         }
         return Vec3.atBottomCenterOf(shrine.above(2));
+    }
+
+    private static boolean canStandAt(ServerLevel level, BlockPos pos) {
+        return isFree(level, pos)
+                && isFree(level, pos.above())
+                && !level.getBlockState(pos.below()).getCollisionShape(level, pos.below()).isEmpty();
+    }
+
+    private static boolean isFree(ServerLevel level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        return state.getCollisionShape(level, pos).isEmpty() && state.getFluidState().isEmpty();
     }
 
     private static float yawTowards(Vec3 from, BlockPos target) {

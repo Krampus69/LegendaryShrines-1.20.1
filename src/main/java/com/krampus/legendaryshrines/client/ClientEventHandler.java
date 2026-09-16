@@ -1,20 +1,18 @@
 package com.krampus.legendaryshrines.client;
 
 import com.krampus.legendaryshrines.LegendaryShrines;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 
-@Mod.EventBusSubscriber(modid = LegendaryShrines.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = LegendaryShrines.MOD_ID, value = Dist.CLIENT)
 public final class ClientEventHandler {
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            ShrineSweep.tick();
-        }
+    public static void onClientTick(ClientTickEvent.Post event) {
+        ShrineSweep.tick();
     }
 
     @SubscribeEvent

@@ -18,11 +18,16 @@ public record ShrineBind(BlockPos pos, ResourceKey<Level> dimension) {
     }
 
     public static ShrineBind load(CompoundTag tag) {
-        BlockPos pos = NbtUtils.readBlockPos(tag.getCompound("Pos"));
+        BlockPos pos = NbtUtils.readBlockPos(tag, "Pos").orElseGet(() -> loadLegacyPos(tag));
         ResourceKey<Level> dimension = ResourceKey.create(
                 Registries.DIMENSION,
-                new ResourceLocation(tag.getString("Dimension")));
+                ResourceLocation.parse(tag.getString("Dimension")));
         return new ShrineBind(pos, dimension);
+    }
+
+    private static BlockPos loadLegacyPos(CompoundTag tag) {
+        CompoundTag pos = tag.getCompound("Pos");
+        return new BlockPos(pos.getInt("X"), pos.getInt("Y"), pos.getInt("Z"));
     }
 
     public double distanceSqrTo(double x, double y, double z) {

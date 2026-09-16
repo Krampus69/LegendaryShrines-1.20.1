@@ -126,11 +126,10 @@ public class RuneParticle extends TextureSheetParticle {
         for (int i = 0; i < 4; i++) {
             int index = reversed ? 3 - i : i;
             Vector3f corner = corners[index];
-            buffer.vertex(corner.x(), corner.y(), corner.z())
-                    .uv(uv[index][0], uv[index][1])
-                    .color(this.rCol, this.gCol, this.bCol, alpha)
-                    .uv2(light)
-                    .endVertex();
+            buffer.addVertex(corner.x(), corner.y(), corner.z())
+                    .setUv(uv[index][0], uv[index][1])
+                    .setColor(this.rCol, this.gCol, this.bCol, alpha)
+                    .setLight(light);
         }
     }
 

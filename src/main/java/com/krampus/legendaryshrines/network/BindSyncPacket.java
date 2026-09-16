@@ -1,58 +1,57 @@
 package com.krampus.legendaryshrines.network;
 
+import com.krampus.legendaryshrines.LegendaryShrines;
 import com.krampus.legendaryshrines.client.ClientShrineState;
 import com.krampus.legendaryshrines.data.ShrineBind;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
-public class BindSyncPacket {
+public record BindSyncPacket(@Nullable ShrineBind bind, boolean activate, long cooldownUntil)
+        implements CustomPacketPayload {
 
-    @Nullable
-    private final ShrineBind bind;
-    private final boolean activate;
-    private final long cooldownUntil;
+    public static final Type<BindSyncPacket> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath(LegendaryShrines.MOD_ID, "bind_sync"));
 
-    public BindSyncPacket(@Nullable ShrineBind bind, boolean activate, long cooldownUntil) {
-        this.bind = bind;
-        this.activate = activate;
-        this.cooldownUntil = cooldownUntil;
+    public static final StreamCodec<FriendlyByteBuf, BindSyncPacket> STREAM_CODEC =
+            StreamCodec.of(BindSyncPacket::write, BindSyncPacket::read);
+
+    private static void write(FriendlyByteBuf buf, BindSyncPacket packet) {
+        buf.writeBoolean(packet.activate);
+        buf.writeLong(packet.cooldownUntil);
+        buf.writeBoolean(packet.bind != null);
+        if (packet.bind != null) {
+            buf.writeBlockPos(packet.bind.pos());
+            buf.writeResourceKey(packet.bind.dimension());
+        }
     }
 
-    public BindSyncPacket(FriendlyByteBuf buf) {
-        this.activate = buf.readBoolean();
-        this.cooldownUntil = buf.readLong();
+    private static BindSyncPacket read(FriendlyByteBuf buf) {
+        boolean activate = buf.readBoolean();
+        long cooldownUntil = buf.readLong();
+        ShrineBind bind = null;
         if (buf.readBoolean()) {
             BlockPos pos = buf.readBlockPos();
-            ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, buf.readResourceLocation());
-            this.bind = new ShrineBind(pos, dimension);
-        } else {
-            this.bind = null;
+            ResourceKey<Level> dimension = buf.readResourceKey(Registries.DIMENSION);
+            bind = new ShrineBind(pos, dimension);
         }
+        return new BindSyncPacket(bind, activate, cooldownUntil);
     }
 
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.activate);
-        buf.writeLong(this.cooldownUntil);
-        buf.writeBoolean(this.bind != null);
-        if (this.bind != null) {
-            buf.writeBlockPos(this.bind.pos());
-            buf.writeResourceLocation(this.bind.dimension().location());
-        }
+    public static void handle(BindSyncPacket packet, IPayloadContext context) {
+        ClientShrineState.set(packet.bind, packet.activate, packet.cooldownUntil);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> context) {
-        NetworkEvent.Context ctx = context.get();
-        ctx.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> ClientShrineState.set(this.bind, this.activate, this.cooldownUntil)));
-        ctx.setPacketHandled(true);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

@@ -11,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -60,7 +59,7 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return state.getValue(HALF) == DoubleBlockHalf.LOWER ? LOWER_SHAPE : UPPER_SHAPE;
     }
 
@@ -84,7 +83,7 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         super.onPlace(state, level, pos, oldState, movedByPiston);
         if (level instanceof ServerLevel serverLevel && state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             ShrineLocations.get(serverLevel).add(pos);
@@ -92,7 +91,7 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (level instanceof ServerLevel serverLevel
                 && state.getValue(HALF) == DoubleBlockHalf.LOWER
                 && !newState.is(this)) {
@@ -102,7 +101,7 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighbour,
+    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour,
                                   LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
         DoubleBlockHalf half = state.getValue(HALF);
         boolean facingOwnHalf = direction.getAxis() == Direction.Axis.Y
@@ -115,7 +114,7 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
             BlockState below = level.getBlockState(pos.below());
             return below.is(this) && below.getValue(HALF) == DoubleBlockHalf.LOWER;
@@ -124,7 +123,7 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
+    protected boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
         return false;
     }
 
@@ -135,8 +134,8 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
+                                               BlockHitResult hit) {
         if (level instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
             if (!ShrineConfig.BIND_ON_USE.get()) {
                 player.displayClientMessage(Component.translatable("message.legendaryshrines.on_use"), true);
@@ -158,7 +157,7 @@ public class ShrineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
     }
 }

@@ -13,8 +13,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class ShrineBlockRenderer implements BlockEntityRenderer<ShrineBlockEntit
 
     private static final RandomSource RANDOM = RandomSource.create();
     private static final int VIEW_DISTANCE = 128;
+    private static final int RENDER_HEIGHT = 3;
 
     public ShrineBlockRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -58,9 +60,21 @@ public class ShrineBlockRenderer implements BlockEntityRenderer<ShrineBlockEntit
         return VIEW_DISTANCE;
     }
 
+    @Override
+    public AABB getRenderBoundingBox(ShrineBlockEntity shrine) {
+        BlockPos pos = shrine.getBlockPos();
+        return new AABB(
+                pos.getX(),
+                pos.getY(),
+                pos.getZ(),
+                pos.getX() + 1,
+                pos.getY() + RENDER_HEIGHT,
+                pos.getZ() + 1);
+    }
+
     private static void emit(VertexConsumer consumer, PoseStack.Pose pose, List<BakedQuad> quads) {
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1.0F, 1.0F, 1.0F,
+            consumer.putBulkData(pose, quad, 1.0F, 1.0F, 1.0F, 1.0F,
                     LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
         }
     }
