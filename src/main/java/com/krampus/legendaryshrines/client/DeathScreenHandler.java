@@ -30,6 +30,10 @@ public final class DeathScreenHandler {
         if (!(event.getScreen() instanceof DeathScreen screen)) {
             return;
         }
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null || minecraft.level.getLevelData().isHardcore()) {
+            return;
+        }
         if (ShrineConfig.OVERRIDE_VANILLA_RESPAWN.get()) {
             return;
         }
@@ -52,7 +56,6 @@ public final class DeathScreenHandler {
         Button button = new Button(x, y, BUTTON_WIDTH, BUTTON_HEIGHT,
                 Component.translatable("gui.legendaryshrines.respawn_at_shrine"),
                 pressed -> {
-                    Minecraft minecraft = Minecraft.getInstance();
                     ModNetwork.CHANNEL.sendToServer(new RespawnAtShrinePacket());
                     if (minecraft.player != null) {
                         minecraft.player.respawn();

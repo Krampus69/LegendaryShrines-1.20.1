@@ -68,6 +68,9 @@ public final class PlayerDataHandler {
     }
 
     private static boolean shouldOverrideRespawn(ServerPlayer player) {
+        if (player.server.isHardcore()) {
+            return false;
+        }
         if (!ShrineConfig.OVERRIDE_VANILLA_RESPAWN.get()) {
             return false;
         }

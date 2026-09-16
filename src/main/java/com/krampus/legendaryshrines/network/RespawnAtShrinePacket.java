@@ -22,7 +22,7 @@ public class RespawnAtShrinePacket {
         NetworkEvent.Context ctx = context.get();
         ctx.enqueueWork(() -> {
             ServerPlayer player = ctx.getSender();
-            if (player == null || player.isAlive()) {
+            if (player == null || player.isAlive() || player.server.isHardcore()) {
                 return;
             }
             if (ShrineBinding.get(player) == null) {
