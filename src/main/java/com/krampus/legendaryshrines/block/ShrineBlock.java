@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -155,6 +156,20 @@ public class ShrineBlock extends Block implements EntityBlock {
             ShrineProximityHandler.bind(serverPlayer, serverLevel, lower);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        return isUnbreakable() ? 0.0F : super.getDestroyProgress(state, player, level, pos);
+    }
+
+    @Override
+    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion) {
+        return isUnbreakable() ? 3600000.0F : super.getExplosionResistance(state, level, pos, explosion);
+    }
+
+    private static boolean isUnbreakable() {
+        return ShrineConfig.SPEC.isLoaded() && ShrineConfig.UNBREAKABLE.get();
     }
 
     @Override

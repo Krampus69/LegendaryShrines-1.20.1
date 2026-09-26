@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,7 +21,8 @@ public final class ModBlocks {
             () -> new ShrineBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.DEEPSLATE)
                     .sound(SoundType.DEEPSLATE)
-                    .strength(-1.0F, 3600000.0F)
+                    .strength(5.0F, 1200.0F)
+                    .pushReaction(PushReaction.BLOCK)
                     .noLootTable()
                     .noOcclusion()));
 

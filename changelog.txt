@@ -1,4 +1,4 @@
 Legendary_Shrine 1.20.1 Changelog
-1.0.2
+1.0.3
 ====
-fixed compat with you Died mod
+Shrines can be broken now (configurable)

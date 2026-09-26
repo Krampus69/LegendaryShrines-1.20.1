@@ -12,6 +12,7 @@ public final class ShrineConfig {
     public static final ForgeConfigSpec.IntValue RESPAWN_COOLDOWN;
     public static final ForgeConfigSpec.BooleanValue OVERRIDE_VANILLA_RESPAWN;
     public static final ForgeConfigSpec.BooleanValue SOUNDS_ENABLED;
+    public static final ForgeConfigSpec.BooleanValue UNBREAKABLE;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -45,6 +46,14 @@ public final class ShrineConfig {
                         "The extra Respawn at the Shrine button is hidden, and the shrine takes priority",
                         "over beds and world spawn. Players without a link, or on cooldown, respawn normally.")
                 .define("overrideVanillaRespawn", false);
+
+        builder.pop();
+        builder.push("block");
+
+        UNBREAKABLE = builder
+                .comment("Make shrines unbreakable by players and explosions.",
+                        "Shrines never drop anything when broken.")
+                .define("unbreakable", false);
 
         builder.pop();
         builder.push("effects");
